@@ -178,7 +178,6 @@ pytest tests/test_matcher.py -v
 
 The system uses PostgreSQL named cursors (`cursor(name=...)`) to stream rows in batches (default 500 rows), ensuring memory efficiency even with large datasets.
 
-## License
+## Inspired By PayPal
 
-MIT
 
