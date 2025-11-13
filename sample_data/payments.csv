@@ -1,0 +1,27 @@
+id,amount,date,reference,payee
+1,1234.56,2025-01-15,Invoice #INV-1023,Acme Corp.
+2,567.89,2025-01-16,Payment REF-4567,Widget Industries
+3,2345.00,2025-01-17,INV-2025-001,Global Services Ltd
+4,890.12,2025-01-18,PO-7890,Tech Solutions Inc
+5,1567.34,2025-01-19,Invoice INV-3456,Acme Corporation
+6,445.67,2025-01-20,REF-8901,Widget Industries LLC
+7,2789.45,2025-01-21,INV-4567,Global Services
+8,123.45,2025-01-22,Payment #P-1234,Small Business Co
+9,3456.78,2025-01-23,Invoice-5678,Enterprise Systems
+10,678.90,2025-01-24,REF-9012,Local Vendor
+11,1890.23,2025-01-25,INV-7890,Acme Corp
+12,456.78,2025-01-26,PO-2345,Tech Solutions
+13,2345.67,2025-01-27,Invoice #INV-9012,Global Services Ltd.
+14,789.01,2025-01-28,REF-3456,Widget Industries
+15,1234.56,2025-01-29,INV-1234,Acme Corporation
+16,567.89,2025-01-30,Payment REF-5678,Small Business Co.
+17,3456.12,2025-02-01,Invoice-2345,Enterprise Systems Inc
+18,890.34,2025-02-02,PO-6789,Local Vendor LLC
+19,1567.45,2025-02-03,INV-3456,Tech Solutions Inc.
+20,445.67,2025-02-04,REF-7890,Widget Industries
+21,2789.78,2025-02-05,Invoice #INV-4567,Global Services
+22,123.89,2025-02-06,Payment P-2345,Small Business Co
+23,3456.90,2025-02-07,INV-5678,Enterprise Systems
+24,678.12,2025-02-08,REF-9012,Local Vendor
+25,1890.34,2025-02-09,Invoice INV-7890,Acme Corp.
+
