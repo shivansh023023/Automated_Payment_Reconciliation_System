@@ -47,9 +47,5 @@ CREATE INDEX IF NOT EXISTS idx_bank_status ON bank_transactions(status);
 CREATE INDEX IF NOT EXISTS idx_matches_payment_id ON matches(payment_id);
 CREATE INDEX IF NOT EXISTS idx_matches_bank_txn_id ON matches(bank_txn_id);
 
--- Trigram index for fuzzy matching on reference fields (requires pg_trgm extension)
--- CREATE EXTENSION IF NOT EXISTS pg_trgm;
--- CREATE INDEX IF NOT EXISTS idx_payments_reference_trgm ON payments USING gin(reference gin_trgm_ops);
--- CREATE INDEX IF NOT EXISTS idx_bank_reference_trgm ON bank_transactions USING gin(reference gin_trgm_ops);
 
 
