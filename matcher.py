@@ -15,7 +15,7 @@ CONFIG = {
     "FUZZY_PAYEE_THRESHOLD": 85,
     "AMOUNT_TOLERANCE_PERCENT": 0.5,
     "FETCH_SIZE": 500,
-    "MIN_MATCH_SCORE": 80,  # Minimum score to consider a match
+    "MIN_MATCH_SCORE": 80,  # Minimum score for  considering a match
 }
 
 
@@ -24,13 +24,13 @@ def normalize_text(text: str) -> str:
     if not text:
         return ""
     
-    # Convert to lowercase and strip whitespace
+    
     normalized = text.lower().strip()
     
-    # Remove punctuation and special characters (keep alphanumeric and spaces)
+    
     normalized = re.sub(r'[^\w\s]', '', normalized)
     
-    # Collapse multiple spaces
+    
     normalized = re.sub(r'\s+', ' ', normalized)
     
     return normalized
@@ -55,9 +55,9 @@ def score_pair(payment_row: Dict[str, Any], bank_row: Dict[str, Any]) -> Tuple[i
     payment_payee = normalize_text(payment_row.get('payee', '') or '')
     bank_payee = normalize_text(bank_row.get('payee', '') or '')
     
-    # Calculate date difference in days
-    date_diff = abs((payment_date - bank_date).days)
     
+    date_diff = abs((payment_date - bank_date).days)
+    # these are the core rules of the algorithm
     # Rule 1: Exact match
     # Amount == amount AND date within ±1 day AND normalized reference equal
     if (payment_amount == bank_amount and 
@@ -95,9 +95,9 @@ def reconcile():
     
     with transaction() as conn:
         # First, mark all existing matches as needing review if payment/bank status changed
-        # (This is a simple approach; in production you might track changes)
         
-        # Stream payments in batches using server-side cursor
+        
+       
         # This avoids loading all payments into memory
         payments_query = """
             SELECT id, amount, date, reference, payee, status
@@ -109,7 +109,7 @@ def reconcile():
         match_count = 0
         unmatched_count = 0
         
-        # Use server-side cursor to stream payments
+        
         for payment in stream_rows(payments_query, name="payments_cursor", 
                                    fetch_size=CONFIG["FETCH_SIZE"]):
             payment_id = payment['id']
@@ -135,9 +135,9 @@ def reconcile():
             best_bank_txn = None
             best_match_type = None
             
-            # Stream candidate bank transactions using another server-side cursor
+           
             # This ensures we don't load all candidates into memory
-            # Note: We use a simple approach - check matches after finding best candidate
+            
             # to avoid cursor conflicts
             for bank_txn in stream_rows(candidates_query, 
                                        params=(min_amount, max_amount, payment_amount),
@@ -153,7 +153,7 @@ def reconcile():
             
             # Insert match if found
             if best_bank_txn:
-                # Check if bank transaction is already matched (using connection from transaction context)
+                # Check if bank transaction is already matched 
                 from db import get_conn
                 conn = get_conn()
                 with conn.cursor() as check_cursor:
