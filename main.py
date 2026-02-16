@@ -11,7 +11,6 @@ from dotenv import load_dotenv
 from db import get_conn, execute_query, execute_update, transaction
 from matcher import reconcile
 
-# Load environment variables from .env file
 load_dotenv()
 
 # Configure logging
@@ -26,7 +25,7 @@ app = FastAPI(title="Payment Reconciliation System", version="1.0.0")
 
 class ConfirmMatchRequest(BaseModel):
     reviewer: str
-    action: str  # "confirm" or "unmatch"
+    action: str
 
 
 @app.on_event("startup")
@@ -64,7 +63,7 @@ async def upload_payments(file: UploadFile = File(...)):
                 reference = row.get('reference', '')
                 payee = row.get('payee', '')
                 
-                # Insert into payments table
+               
                 insert_query = """
                     INSERT INTO payments (amount, date, reference, payee, raw, status)
                     VALUES (%s, %s, %s, %s, %s, 'pending')
@@ -105,7 +104,7 @@ async def upload_bank(file: UploadFile = File(...)):
                 reference = row.get('reference', '')
                 payee = row.get('payee', '')
                 
-                # Insert into bank_transactions table
+                
                 insert_query = """
                     INSERT INTO bank_transactions (amount, date, reference, payee, raw, status)
                     VALUES (%s, %s, %s, %s, %s, 'pending')
@@ -183,7 +182,7 @@ async def get_matches(status: Optional[str] = None, limit: int = 100):
         
         matches = execute_query(query, tuple(params) if params else (limit,))
         
-        # Convert date/datetime objects and Decimal to strings/float for JSON serialization
+        # This part Converts date/datetime objects and Decimal to strings/float for JSON serialization
         from decimal import Decimal
         for match in matches:
             if 'payment_date' in match and match['payment_date']:
@@ -192,7 +191,7 @@ async def get_matches(status: Optional[str] = None, limit: int = 100):
                 match['bank_date'] = str(match['bank_date'])
             if 'matched_at' in match and match['matched_at']:
                 match['matched_at'] = str(match['matched_at'])
-            # Convert Decimal to float
+            # this part Converts Decimal to float
             if 'payment_amount' in match and isinstance(match['payment_amount'], Decimal):
                 match['payment_amount'] = float(match['payment_amount'])
             if 'bank_amount' in match and isinstance(match['bank_amount'], Decimal):
@@ -219,7 +218,7 @@ async def confirm_match(match_id: int, request: ConfirmMatchRequest):
             raise HTTPException(status_code=400, detail="action must be 'confirm' or 'unmatch'")
         
         with transaction() as conn:
-            # Check if match exists
+            # This part Checks if match exists
             check_query = "SELECT id, payment_id, bank_txn_id FROM matches WHERE id = %s"
             match = execute_query(check_query, (match_id,))
             
@@ -237,7 +236,7 @@ async def confirm_match(match_id: int, request: ConfirmMatchRequest):
                 """
                 execute_update(update_query, (request.reviewer, match_id))
                 
-                # Update payment and bank transaction status
+                # This code Update payment and bank transaction status
                 execute_update("UPDATE payments SET status = 'confirmed' WHERE id = %s", 
                               (match_data['payment_id'],))
                 execute_update("UPDATE bank_transactions SET status = 'confirmed' WHERE id = %s", 
@@ -250,7 +249,7 @@ async def confirm_match(match_id: int, request: ConfirmMatchRequest):
                 })
             
             else:  # unmatch
-                # Remove the match
+               
                 execute_update("DELETE FROM matches WHERE id = %s", (match_id,))
                 
                 # Reset payment and bank transaction status
